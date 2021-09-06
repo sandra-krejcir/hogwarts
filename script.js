@@ -23,9 +23,10 @@ function convertJSONData(jsonDAta) {
   jsonDAta.forEach((elm) => {
     const student = Object.create(Student);
     const trimmedName = elm.fullname.trim();
-    student.firstName = getFirstName(trimmedName);
-    student.lastName = getLastName(trimmedName);
-    student.middleName = getMiddleName(trimmedName);
+    student.firstName = showUppercased(getFirstName(trimmedName));
+    student.lastName = showUppercased(getLastName(trimmedName));
+    student.middleName = showUppercased(getMiddleName(trimmedName));
+    student.nickName = showUppercased(getNickName(trimmedName));
     student.gender = elm.gender;
     student.imageFile = `${student.lastName.toLowerCase()}.${student.firstName
       .substring(0, 1)
@@ -62,10 +63,22 @@ function getMiddleName(fullName) {
   const middleNameEnd = fullName.lastIndexOf(" ");
   const middleName = fullName.substring(middleNameStart, middleNameEnd);
   if (middleName.includes(" ")) {
-    const noMiddleName = "null";
-    return noMiddleName;
+    return "null";
+  } else if (middleName.includes('"')) {
+    return "null";
   } else {
     return middleName;
+  }
+}
+
+function getNickName(nicKName) {
+  const nickNameStart = nicKName.indexOf(" ");
+  const nickNameEnd = nicKName.lastIndexOf(" ");
+  const nickName = nicKName.substring(nickNameStart, nickNameEnd);
+  if (nickName.includes('"')) {
+    return nickName.replaceAll('"', "").trim();
+  } else {
+    return "null";
   }
 }
 
