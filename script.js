@@ -28,12 +28,81 @@ function convertJSONData(jsonDAta) {
     student.middleName = showUppercased(getMiddleName(trimmedName));
     student.nickName = showUppercased(getNickName(trimmedName));
     student.gender = elm.gender;
-    student.imageFile = `${student.lastName.toLowerCase()}.${student.firstName
-      .substring(0, 1)
-      .toLowerCase()}.png`;
-    student.house = elm.house.trim();
+    if (student.lastName === "Patil") {
+      student.imageFile = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
+    } else if (student.lastName.includes("-")) {
+      student.imageFile = `${student.lastName
+        .substring(student.lastName.lastIndexOf("-") + 1)
+        .toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
+    } else {
+      student.imageFile = `${student.lastName.toLowerCase()}_${student.firstName
+        .substring(0, 1)
+        .toLowerCase()}.png`;
+    }
+    student.house = showUppercased(elm.house.trim());
     arrayOfStudents.push(student);
+    showStudent(student);
   });
+}
+
+function showStudent(aStudent) {
+  const template = document.querySelector(".theStudentList").content;
+  const copy = template.cloneNode(true);
+  if (aStudent.lastName === "Null") {
+    copy.querySelector(".studName").textContent = aStudent.firstName;
+  } else {
+    copy.querySelector(
+      ".studName"
+    ).textContent = `${aStudent.firstName} ${aStudent.lastName}`;
+  }
+  copy
+    .querySelector(".studName")
+    .setAttribute("id", `${aStudent.firstName}${aStudent.lastName}`);
+  copy
+    .querySelector(".profile")
+    .setAttribute("id", `${aStudent.firstName}${aStudent.lastName}Popup`);
+  copy.querySelector(".cresent").setAttribute("id", aStudent.house);
+  copy
+    .querySelector(".exit")
+    .setAttribute("id", `${aStudent.firstName}${aStudent.lastName}X`);
+  copy.querySelector("img").src = `images/${aStudent.imageFile}`;
+  copy.querySelector(
+    ".firstName"
+  ).textContent = `FIRST NAME: ${aStudent.firstName}`;
+  copy.querySelector(
+    ".lastName"
+  ).textContent = `LAST NAME: ${aStudent.lastName}`;
+  copy.querySelector(
+    ".middleName"
+  ).textContent = `MIDDLE NAME: ${aStudent.middleName}`;
+  copy.querySelector(
+    ".nickName"
+  ).textContent = ` NICKNAME: ${aStudent.nickName}`;
+  copy.querySelector(".house").textContent = `HOUSE: ${aStudent.house}`;
+  copy.querySelector(".bloodStatus").textContent = `BLOOD-STATUS: /`;
+  copy.querySelector(".prefect").textContent = `PREFECT: /`;
+  copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: /`;
+
+  copy
+    .getElementById(`${aStudent.firstName}${aStudent.lastName}`)
+    .addEventListener("click", PopUp);
+  const popUp = copy.getElementById(
+    `${aStudent.firstName}${aStudent.lastName}Popup`
+  );
+  const exClose = copy.getElementById(
+    `${aStudent.firstName}${aStudent.lastName}X`
+  );
+  function PopUp() {
+    console.log("function PopUp");
+    popUp.classList.remove("disapear");
+    exClose.addEventListener("click", popClose);
+  }
+  function popClose() {
+    console.log("function popClose()");
+    popUp.classList.add("disapear");
+  }
+  const parent = document.querySelector("ul");
+  parent.appendChild(copy);
 }
 
 console.log("arrayOfStudents", arrayOfStudents);

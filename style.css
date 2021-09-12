@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand&display=swap");
+
+body {
+  margin-left: 5vw;
+  font-family: "Quicksand", sans-serif;
+}
+
+.disapear {
+  display: none;
+}
+
+li {
+  list-style-type: none;
+}
+
+.profile {
+  border-style: solid;
+  max-width: fit-content;
+  max-height: max-content;
+  padding-top: 30px;
+  padding-bottom: 40px;
+}
+
+.profile img {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.profile p {
+  padding-left: 40px;
+}
+
+.exit {
+  display: flex;
+  flex-direction: row-reverse;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+
+#expell {
+  display: flex;
+  flex-direction: row-reverse;
+  padding-right: 15px;
+  padding-top: 20px;
+  padding-bottom: 15px;
+}
+
+.gryfborder {
+  outline: 3px solid #ffea00;
+  outline-offset: -10px;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border: 3px solid red;
+}
+
+.theBorder {
+  border-style: solid;
+  color: black;
+  max-width: fit-content;
+  max-height: max-content;
+  padding: 20px 20px 20px 20px;
+}
