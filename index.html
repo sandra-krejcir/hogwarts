@@ -8,30 +8,44 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <select name="operator" id="operator">
+      <option value="Gryffindor">
+        Gryffindor
+      </option>
+      <option value="Slytherin">
+        Slytherin
+      </option>
+      <option value="Hufflepuff">
+        Hufflepuff
+      </option>
+      <option value="Ravenclaw">
+        Ravenclaw
+      </option>
+      </select>
     <h1>Students</h1>
     <sec>
       <ul>
-        <template class="theStudentList">
-          <li><h2 class="studName"></h2></li>
-          <li class="profile disapear theBorder">
-            <div class="gryfborder">
-            <div class="cresent"></div>
-              <div class="exit">X</div>
-              <div><img src=""></img></div>
-              <p class="firstName"></p>
-              <p class="lastName"></p>
-              <p class="middleName"></p>
-              <p class="nickName"></p>
-              <p class="house"></p>
-              <p class="bloodStatus"></p>
-              <p><span class="prefect"></span> &nbsp&nbsp&nbsp<button class="addPrefect">ADD</button></p>
-              <p><span class="theSquad"></span> &nbsp&nbsp&nbsp<button class="addToSquad">ADD</button></p>
-              <div id="expell"><button class="expell">EXPELL</button></div>
-            </div>
-          </li>
-        </template>
       </ul>
     </sec>
+    <template class="theStudentList">
+      <li><h2 class="studName"></h2></li>
+      <li class="profile disapear theBorder">
+        <div class="gryfborder">
+        <div class="cresent"></div>
+          <div class="exit">X</div>
+          <div><img src=""></img></div>
+          <p class="firstName"></p>
+          <p class="lastName"></p>
+          <p class="middleName"></p>
+          <p class="nickName"></p>
+          <p class="house"></p>
+          <p class="bloodStatus"></p>
+          <p><span class="prefect"></span> &nbsp&nbsp&nbsp<button class="addPrefect">ADD</button></p>
+          <p><span class="theSquad"></span> &nbsp&nbsp&nbsp<button class="addToSquad">ADD</button></p>
+          <div id="expell"><button class="expell">EXPELL</button></div>
+        </div>
+      </li>
+    </template>
     <script src="script.js"></script>
   </body>
 </html>

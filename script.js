@@ -14,35 +14,50 @@ const Student = {
 document.addEventListener("DOMContentLoaded", start);
 
 function start() {
+  console.log("ready");
+
+  loadJSON();
+}
+
+async function loadJSON() {
   fetch("https://petlatkea.dk/2021/hogwarts/students.json")
     .then((response) => response.json())
-    .then((data) => convertJSONData(data));
+    .then((data) => prepareObjects(data));
+}
+
+function prepareObjects(jsonData) {
+  arrayOfStudents = jsonData.map(convertJSONData);
+
+  showStudents(arrayOfStudents);
 }
 
 function convertJSONData(jsonDAta) {
-  jsonDAta.forEach((elm) => {
-    const student = Object.create(Student);
-    const trimmedName = elm.fullname.trim();
-    student.firstName = showUppercased(getFirstName(trimmedName));
-    student.lastName = showUppercased(getLastName(trimmedName));
-    student.middleName = showUppercased(getMiddleName(trimmedName));
-    student.nickName = showUppercased(getNickName(trimmedName));
-    student.gender = elm.gender;
-    if (student.lastName === "Patil") {
-      student.imageFile = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
-    } else if (student.lastName.includes("-")) {
-      student.imageFile = `${student.lastName
-        .substring(student.lastName.indexOf("-") + 1)
-        .toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
-    } else {
-      student.imageFile = `${student.lastName.toLowerCase()}_${student.firstName
-        .substring(0, 1)
-        .toLowerCase()}.png`;
-    }
-    student.house = showUppercased(elm.house.trim());
-    arrayOfStudents.push(student);
-    showStudent(student);
-  });
+  const student = Object.create(Student);
+  const trimmedName = jsonDAta.fullname.trim();
+  student.firstName = showUppercased(getFirstName(trimmedName));
+  student.lastName = showUppercased(getLastName(trimmedName));
+  student.middleName = showUppercased(getMiddleName(trimmedName));
+  student.nickName = showUppercased(getNickName(trimmedName));
+  student.gender = jsonDAta.gender;
+  if (student.lastName === "Patil") {
+    student.imageFile = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
+  } else if (student.lastName.includes("-")) {
+    student.imageFile = `${student.lastName
+      .substring(student.lastName.indexOf("-") + 1)
+      .toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
+  } else {
+    student.imageFile = `${student.lastName.toLowerCase()}_${student.firstName
+      .substring(0, 1)
+      .toLowerCase()}.png`;
+  }
+  student.house = showUppercased(jsonDAta.house.trim());
+  return student;
+}
+
+function showStudents(students) {
+  document.querySelector("ul").innerHTML = "";
+
+  students.forEach(showStudent);
 }
 
 function showStudent(aStudent) {
