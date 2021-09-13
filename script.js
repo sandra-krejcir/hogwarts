@@ -16,6 +16,10 @@ document.addEventListener("DOMContentLoaded", start);
 function start() {
   console.log("ready");
 
+  document
+    .querySelectorAll("[data-action='filter']")
+    .forEach((button) => button.addEventListener("click", selectedFilter));
+
   loadJSON();
 }
 
@@ -52,6 +56,48 @@ function convertJSONData(jsonDAta) {
   }
   student.house = showUppercased(jsonDAta.house.trim());
   return student;
+}
+
+function selectedFilter(choice) {
+  const filter = choice.target.dataset.filter;
+  filterList(filter);
+}
+
+function filterList(house) {
+  let filteredList = arrayOfStudents;
+  console.log(house);
+  if (house === "Gryffindor") {
+    filteredList = arrayOfStudents.filter(onlyGryffindor);
+  } else if (house === "Slytherin") {
+    filteredList = arrayOfStudents.filter(onlySlytherin);
+  } else if (house === "Hufflepuff") {
+    filteredList = arrayOfStudents.filter(onlyHufflepuff);
+  } else if (house === "Ravenclaw") {
+    filteredList = arrayOfStudents.filter(onlyRavenclaw);
+  }
+
+  console.log(filteredList);
+  showStudents(filteredList);
+}
+
+function onlyGryffindor(student) {
+  if (student.house === "Gryffindor") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function onlySlytherin(houseS) {
+  return houseS.house === "Slytherin";
+}
+
+function onlyHufflepuff(houseH) {
+  return houseH.house === "Hufflepuff";
+}
+
+function onlyRavenclaw(houseR) {
+  return houseR.house === "Ravenclaw";
 }
 
 function showStudents(students) {
