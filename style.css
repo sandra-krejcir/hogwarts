@@ -13,6 +13,10 @@ li {
   list-style-type: none;
 }
 
+.studName {
+  cursor: pointer;
+}
+
 .profile {
   border-style: solid;
   max-width: fit-content;
@@ -35,6 +39,7 @@ li {
   flex-direction: row-reverse;
   padding-top: 10px;
   padding-right: 20px;
+  cursor: pointer;
 }
 
 #expell {
@@ -43,6 +48,10 @@ li {
   padding-right: 15px;
   padding-top: 20px;
   padding-bottom: 15px;
+}
+
+button {
+  cursor: pointer;
 }
 
 .gryfborder {

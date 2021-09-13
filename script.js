@@ -32,7 +32,7 @@ function convertJSONData(jsonDAta) {
       student.imageFile = `${student.lastName.toLowerCase()}_${student.firstName.toLowerCase()}.png`;
     } else if (student.lastName.includes("-")) {
       student.imageFile = `${student.lastName
-        .substring(student.lastName.lastIndexOf("-") + 1)
+        .substring(student.lastName.indexOf("-") + 1)
         .toLowerCase()}_${student.firstName.substring(0, 1).toLowerCase()}.png`;
     } else {
       student.imageFile = `${student.lastName.toLowerCase()}_${student.firstName
@@ -152,6 +152,14 @@ function getNickName(nicKName) {
 }
 
 function showUppercased(fulLName) {
+  if (fulLName.includes("-")) {
+    const uppecasedName =
+      fulLName.substring(0, 1).toUpperCase() +
+      fulLName.substring(1, fulLName.indexOf("-") + 1).toLowerCase() +
+      fulLName[fulLName.indexOf("-") + 1].toUpperCase() +
+      fulLName.substring(fulLName.indexOf("-") + 2).toLowerCase();
+    return uppecasedName;
+  }
   const uppecasedName =
     fulLName.substring(0, 1).toUpperCase() +
     fulLName.substring(1).toLowerCase();
