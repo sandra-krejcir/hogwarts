@@ -16,20 +16,25 @@ document.addEventListener("DOMContentLoaded", start);
 function start() {
   console.log("ready");
 
-  document
-    .querySelectorAll("[data-action='filter']")
-    .forEach((button) => button.addEventListener("click", selectedFilter));
+  const filterButtons = document.querySelectorAll("[data-action='filter']");
+  filterButtons.forEach((button) =>
+    button.addEventListener("click", selectedFilter)
+  );
 
-  loadJSON();
+  document
+    .querySelectorAll("[data-action='sort']")
+    .forEach((button) => button.addEventListener("click", selectedSortBy));
+
+  getJSON();
 }
 
-async function loadJSON() {
+async function getJSON() {
   fetch("https://petlatkea.dk/2021/hogwarts/students.json")
     .then((response) => response.json())
-    .then((data) => prepareObjects(data));
+    .then((data) => prepareData(data));
 }
 
-function prepareObjects(jsonData) {
+function prepareData(jsonData) {
   arrayOfStudents = jsonData.map(convertJSONData);
 
   showStudents(arrayOfStudents);
@@ -88,16 +93,70 @@ function onlyGryffindor(student) {
   }
 }
 
-function onlySlytherin(houseS) {
-  return houseS.house === "Slytherin";
+function onlySlytherin(student) {
+  if (student.house === "Slytherin") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
-function onlyHufflepuff(houseH) {
-  return houseH.house === "Hufflepuff";
+function onlyHufflepuff(student) {
+  if (student.house === "Hufflepuff") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
-function onlyRavenclaw(houseR) {
-  return houseR.house === "Ravenclaw";
+function onlyRavenclaw(student) {
+  if (student.house === "Ravenclaw") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function selectedSortBy(sortChoice) {
+  const sortBy = sortChoice.target.dataset.sort;
+  sortList(sortBy);
+}
+
+function sortList(sortedBy) {
+  let sortedList = arrayOfStudents;
+  if (sortedBy === "firstName") {
+    sortedList = sortedList.sort(sortTheFirstName);
+  } else if (sortedBy === "lastName") {
+    sortedList = sortedList.sort(sortTheLastName);
+  } else if (sortedBy === "house") {
+    sortedList = sortedList.sort(sortTheHouses);
+  }
+
+  showStudents(sortedList);
+}
+
+function sortTheFirstName(studentA, studentB) {
+  if (studentA.firstName < studentB.firstName) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+function sortTheLastName(studentA, studentB) {
+  if (studentA.lastName < studentB.lastName) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+function sortTheHouses(studentA, studentB) {
+  if (studentA.house < studentB.house) {
+    return -1;
+  } else {
+    return 1;
+  }
 }
 
 function showStudents(students) {
