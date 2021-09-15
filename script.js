@@ -1,6 +1,8 @@
 "use strict";
 
 let arrayOfStudents = [];
+let arrayOfExpelled = [];
+
 const Student = {
   firstName: "",
   lastName: "",
@@ -9,6 +11,7 @@ const Student = {
   gender: "",
   imageFile: "",
   house: "",
+  prefect: false,
 };
 
 document.addEventListener("DOMContentLoaded", start);
@@ -119,23 +122,51 @@ function onlyRavenclaw(student) {
 
 function selectedSortBy(sortChoice) {
   const sortBy = sortChoice.target.dataset.sort;
-  sortList(sortBy);
+  const sortDir = sortChoice.target.dataset.sortDirection;
+
+  if (sortDir === "asc") {
+    sortChoice.target.dataset.sortDirection = "desc";
+  } else {
+    sortChoice.target.dataset.sortDirection = "asc";
+  }
+
+  sortList(sortBy, sortDir);
 }
 
-function sortList(sortedBy) {
+function sortList(sortedBy, dirOfSort) {
   let sortedList = arrayOfStudents;
-  if (sortedBy === "firstName") {
+  let direction = 1;
+
+  if (dirOfSort === "asc") {
+    direction = -1;
+  } else {
+    direction = 1;
+  }
+
+  console.log(sortedList);
+
+  sortedList = sortedList.sort(sortByParameter);
+
+  function sortByParameter(studentA, studentB) {
+    if (studentA[sortedBy] < studentB[sortedBy]) {
+      return -1 * direction;
+    } else {
+      return 1 * direction;
+    }
+  }
+
+  /*if (sortedBy === "firstName") {
     sortedList = sortedList.sort(sortTheFirstName);
   } else if (sortedBy === "lastName") {
     sortedList = sortedList.sort(sortTheLastName);
   } else if (sortedBy === "house") {
     sortedList = sortedList.sort(sortTheHouses);
-  }
+  }*/
 
   showStudents(sortedList);
 }
 
-function sortTheFirstName(studentA, studentB) {
+/*function sortTheFirstName(studentA, studentB) {
   if (studentA.firstName < studentB.firstName) {
     return -1;
   } else {
@@ -157,7 +188,7 @@ function sortTheHouses(studentA, studentB) {
   } else {
     return 1;
   }
-}
+}*/
 
 function showStudents(students) {
   document.querySelector("ul").innerHTML = "";
@@ -200,7 +231,30 @@ function showStudent(aStudent) {
   ).textContent = ` NICKNAME: ${aStudent.nickName}`;
   copy.querySelector(".house").textContent = `HOUSE: ${aStudent.house}`;
   copy.querySelector(".bloodStatus").textContent = `BLOOD-STATUS: /`;
-  copy.querySelector(".prefect").textContent = `PREFECT: /`;
+  if (aStudent.prefect === false) {
+    copy.querySelector(".prefect").textContent = `PREFECT: no`;
+    copy.querySelector(".addPrefect").textContent = "ADD";
+    copy.querySelector(".addPrefect").addEventListener("click", addPrefect);
+  } else {
+    copy.querySelector(".prefect").textContent = `PREFECT: yes`;
+    copy.querySelector(".addPrefect").textContent = "REMOVE";
+    copy.querySelector(".addPrefect").addEventListener("click", removePrefect);
+  }
+
+  function addPrefect() {
+    if (aStudent.house === "Gryffindor") {
+      aStudent.prefect = true;
+      showStudents(arrayOfStudents);
+    } else {
+      console.log("Student is not in Gryffindor");
+    }
+  }
+
+  function removePrefect() {
+    aStudent.prefect = false;
+
+    showStudents(arrayOfStudents);
+  }
   copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: /`;
 
   copy
@@ -220,6 +274,14 @@ function showStudent(aStudent) {
   function popClose() {
     console.log("function popClose()");
     popUp.classList.add("disapear");
+  }
+  copy.querySelector(".expell").addEventListener("click", expellStudent);
+  function expellStudent() {
+    const studentIndex = arrayOfStudents.indexOf(aStudent);
+    arrayOfStudents.splice(studentIndex, 1);
+    arrayOfExpelled.push(aStudent);
+    console.log(arrayOfExpelled);
+    showStudents(arrayOfStudents);
   }
   const parent = document.querySelector("ul");
   parent.appendChild(copy);
