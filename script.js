@@ -82,6 +82,8 @@ function filterList(house) {
     filteredList = arrayOfStudents.filter(onlyHufflepuff);
   } else if (house === "Ravenclaw") {
     filteredList = arrayOfStudents.filter(onlyRavenclaw);
+  } else if (house === "Expelled") {
+    filteredList = arrayOfExpelled;
   }
 
   console.log(filteredList);
