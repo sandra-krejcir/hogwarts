@@ -140,6 +140,13 @@ function selectedSortBy(sortChoice) {
   filter_sortSettings.sortBy = sortBy;
   filter_sortSettings.sortDir = sortDir;
 
+  const oldSortBy = document.querySelector(
+    `[data-sort='${filter_sortSettings.sortBy}']`
+  );
+  oldSortBy.classList.remove("sortBy");
+
+  sortChoice.target.classList.add("sortBy");
+
   if (sortDir === "asc") {
     sortChoice.target.dataset.sortDirection = "desc";
   } else {

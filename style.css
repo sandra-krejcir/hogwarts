@@ -110,3 +110,11 @@ button {
   position: relative;
   z-index: 2;
 }
+
+#sorting .sortBy[data-sort-direction="asc"]::after {
+  content: " A-Z";
+}
+
+#sorting .sortBy[data-sort-direction="desc"]::after {
+  content: " Z-A";
+}
