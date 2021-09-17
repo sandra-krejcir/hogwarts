@@ -2,6 +2,11 @@
 
 let arrayOfStudents = [];
 let arrayOfExpelled = [];
+const filter_sortSettings = {
+  filterBy: "all",
+  sortBy: "",
+  sortDir: "",
+};
 
 const Student = {
   firstName: "",
@@ -75,26 +80,31 @@ function convertJSONData(jsonDAta) {
 
 function selectedFilter(choice) {
   const filter = choice.target.dataset.filter;
-  filterList(filter);
+  //filterList(filter);
+  setFilter(filter);
 }
 
-function filterList(house) {
-  let filteredList = arrayOfStudents;
-  console.log(house);
-  if (house === "Gryffindor") {
+function setFilter(filter) {
+  filter_sortSettings.filterBy = filter;
+  buildList();
+}
+
+function filterList(filteredList) {
+  console.log(filter_sortSettings.filterBy);
+  if (filter_sortSettings.filterBy === "Gryffindor") {
     filteredList = arrayOfStudents.filter(onlyGryffindor);
-  } else if (house === "Slytherin") {
+  } else if (filter_sortSettings.filterBy === "Slytherin") {
     filteredList = arrayOfStudents.filter(onlySlytherin);
-  } else if (house === "Hufflepuff") {
+  } else if (filter_sortSettings.filterBy === "Hufflepuff") {
     filteredList = arrayOfStudents.filter(onlyHufflepuff);
-  } else if (house === "Ravenclaw") {
+  } else if (filter_sortSettings.filterBy === "Ravenclaw") {
     filteredList = arrayOfStudents.filter(onlyRavenclaw);
-  } else if (house === "Expelled") {
+  } else if (filter_sortSettings.filterBy === "Expelled") {
     filteredList = arrayOfExpelled;
   }
 
   console.log(filteredList);
-  showStudents(filteredList);
+  return filteredList;
 }
 
 function onlyGryffindor(student) {
@@ -139,14 +149,19 @@ function selectedSortBy(sortChoice) {
     sortChoice.target.dataset.sortDirection = "asc";
   }
 
-  sortList(sortBy, sortDir);
+  setSort(sortBy, sortDir);
 }
 
-function sortList(sortedBy, dirOfSort) {
-  let sortedList = arrayOfStudents;
+function setSort(sortBy, sortDir) {
+  filter_sortSettings.sortBy = sortBy;
+  filter_sortSettings.sortDir = sortDir;
+  buildList();
+}
+
+function sortList(sortedList) {
   let direction = 1;
 
-  if (dirOfSort === "asc") {
+  if (filter_sortSettings.sortDir === "asc") {
     direction = -1;
   } else {
     direction = 1;
@@ -157,47 +172,18 @@ function sortList(sortedBy, dirOfSort) {
   sortedList = sortedList.sort(sortByParameter);
 
   function sortByParameter(studentA, studentB) {
-    if (studentA[sortedBy] < studentB[sortedBy]) {
+    if (
+      studentA[filter_sortSettings.sortBy] <
+      studentB[filter_sortSettings.sortBy]
+    ) {
       return -1 * direction;
     } else {
       return 1 * direction;
     }
   }
 
-  /*if (sortedBy === "firstName") {
-    sortedList = sortedList.sort(sortTheFirstName);
-  } else if (sortedBy === "lastName") {
-    sortedList = sortedList.sort(sortTheLastName);
-  } else if (sortedBy === "house") {
-    sortedList = sortedList.sort(sortTheHouses);
-  }*/
-
-  showStudents(sortedList);
+  return sortedList;
 }
-
-/*function sortTheFirstName(studentA, studentB) {
-  if (studentA.firstName < studentB.firstName) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function sortTheLastName(studentA, studentB) {
-  if (studentA.lastName < studentB.lastName) {
-    return -1;
-  } else {
-    return 1;
-  }
-}
-
-function sortTheHouses(studentA, studentB) {
-  if (studentA.house < studentB.house) {
-    return -1;
-  } else {
-    return 1;
-  }
-}*/
 
 function showStudents(students) {
   document.querySelector("ul").innerHTML = "";
@@ -329,6 +315,12 @@ function showStudent(aStudent) {
 }
 
 console.log("arrayOfStudents", arrayOfStudents);
+
+function buildList() {
+  const displayedList = filterList(arrayOfStudents);
+  const sortedList = sortList(displayedList);
+  showStudents(sortedList);
+}
 
 function getFirstName(fullName) {
   if (fullName.includes(" ")) {
