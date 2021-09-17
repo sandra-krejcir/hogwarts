@@ -80,11 +80,6 @@ function convertJSONData(jsonDAta) {
 
 function selectedFilter(choice) {
   const filter = choice.target.dataset.filter;
-  //filterList(filter);
-  setFilter(filter);
-}
-
-function setFilter(filter) {
   filter_sortSettings.filterBy = filter;
   buildList();
 }
@@ -142,6 +137,8 @@ function onlyRavenclaw(student) {
 function selectedSortBy(sortChoice) {
   const sortBy = sortChoice.target.dataset.sort;
   const sortDir = sortChoice.target.dataset.sortDirection;
+  filter_sortSettings.sortBy = sortBy;
+  filter_sortSettings.sortDir = sortDir;
 
   if (sortDir === "asc") {
     sortChoice.target.dataset.sortDirection = "desc";
@@ -149,12 +146,6 @@ function selectedSortBy(sortChoice) {
     sortChoice.target.dataset.sortDirection = "asc";
   }
 
-  setSort(sortBy, sortDir);
-}
-
-function setSort(sortBy, sortDir) {
-  filter_sortSettings.sortBy = sortBy;
-  filter_sortSettings.sortDir = sortDir;
   buildList();
 }
 
@@ -308,7 +299,7 @@ function showStudent(aStudent) {
     arrayOfStudents.splice(studentIndex, 1);
     arrayOfExpelled.push(aStudent);
     console.log(arrayOfExpelled);
-    showStudents(arrayOfStudents);
+    buildList();
   }
   const parent = document.querySelector("ul");
   parent.appendChild(copy);
