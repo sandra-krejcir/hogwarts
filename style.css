@@ -31,13 +31,13 @@ li {
 }
 
 .profile p {
-  padding-left: 40px;
+  padding-left: 50px;
 }
 
 .exit {
   display: flex;
   flex-direction: row-reverse;
-  padding-top: 10px;
+  margin-top: -30px;
   padding-right: 20px;
   cursor: pointer;
 }
@@ -45,23 +45,53 @@ li {
 #expell {
   display: flex;
   flex-direction: row-reverse;
-  padding-right: 15px;
+  padding-right: 17px;
   padding-top: 20px;
-  padding-bottom: 15px;
+  padding-bottom: 17px;
 }
 
 button {
   cursor: pointer;
 }
 
-.gryfborder {
-  outline: 3px solid #ffea00;
+.gryffindorBorder {
+  outline: 3px solid #eeba30;
   outline-offset: -10px;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  border: 3px solid red;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 3px solid #ae0001;
+}
+
+.slytherinBorder {
+  outline: 3px solid #aaaaaa;
+  outline-offset: -10px;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 3px solid #2a623d;
+}
+
+.ravenclawBorder {
+  outline: 3px solid #946b2d;
+  outline-offset: -10px;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 3px solid #222f5b;
+}
+
+.hufflepuffBorder {
+  outline: 3px solid #60605c;
+  outline-offset: -10px;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 3px solid #ffdb00;
 }
 
 .theBorder {
@@ -69,5 +99,14 @@ button {
   color: black;
   max-width: fit-content;
   max-height: max-content;
-  padding: 20px 20px 20px 20px;
+  padding: 25px 25px 25px 25px;
+}
+
+.cresent {
+  width: 70px;
+  height: auto;
+  margin-left: -130px;
+  margin-top: -25px;
+  position: relative;
+  z-index: 2;
 }

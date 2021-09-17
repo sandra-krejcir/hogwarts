@@ -196,13 +196,16 @@ function showStudent(aStudent) {
     .querySelector(".studName")
     .setAttribute("id", `${aStudent.firstName}${aStudent.lastName}`);
   copy
+    .querySelector(".otherBorder")
+    .classList.add(`${aStudent.house.toLowerCase()}Border`);
+  copy.querySelector(".cresent").src = `images/${aStudent.house}_crest.png`;
+  copy
     .querySelector(".profile")
     .setAttribute("id", `${aStudent.firstName}${aStudent.lastName}Popup`);
-  copy.querySelector(".cresent").setAttribute("id", aStudent.house);
   copy
     .querySelector(".exit")
     .setAttribute("id", `${aStudent.firstName}${aStudent.lastName}X`);
-  copy.querySelector("img").src = `images/${aStudent.imageFile}`;
+  copy.querySelector(".profilePic").src = `images/${aStudent.imageFile}`;
   copy.querySelector(
     ".firstName"
   ).textContent = `FIRST NAME: ${aStudent.firstName}`;
