@@ -14,6 +14,13 @@ const Student = {
   prefect: false,
 };
 
+const houses = {
+  Gryffindor: { prefects: [] },
+  Slytherin: { prefects: [] },
+  Hufflepuff: { prefects: [] },
+  Ravenclaw: { prefects: [] },
+};
+
 document.addEventListener("DOMContentLoaded", start);
 
 function start() {
@@ -244,9 +251,38 @@ function showStudent(aStudent) {
   }
 
   function addPrefect() {
-    if (aStudent.house === "Gryffindor") {
+    /*let filteredHouses = filterHouse(aStudent.house);
+    function filterHouse(house) {
+      const arr = arrayOfStudents.filter(function (elm) {
+        if (elm.house === house) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      return arr;
+    }
+    /*const filteredHouses = arrayOfStudents.filter(function (elm) {
+      if (elm.house === "Gryffindor") {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    /*const howManyPref = filteredHouses.filter(function (elm) {
+      if (elm.prefect === true) {
+        return true;
+      } else {
+        return false;
+      }
+    });*/
+    console.log("aStudent.house", aStudent.house);
+    console.log("houses[aStudent.house]", houses[aStudent.house]);
+    if (houses[aStudent.house].prefects.length <= 1) {
       aStudent.prefect = true;
+      houses[aStudent.house].prefects.push(aStudent);
       showStudents(arrayOfStudents);
+      PopUp();
     } else {
       console.log("Student is not in Gryffindor");
     }
@@ -254,8 +290,11 @@ function showStudent(aStudent) {
 
   function removePrefect() {
     aStudent.prefect = false;
-
+    const prefectIndex = houses[aStudent.house].prefects.indexOf(aStudent);
+    houses[aStudent.house].prefects.splice(prefectIndex, 1);
+    console.log("houses[aStudent.house]", houses[aStudent.house]);
     showStudents(arrayOfStudents);
+    PopUp();
   }
   copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: /`;
 
