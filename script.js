@@ -17,6 +17,7 @@ const Student = {
   imageFile: "",
   house: "",
   prefect: false,
+  inquis: false,
 };
 
 const houses = {
@@ -268,7 +269,7 @@ function showStudent(aStudent) {
     if (houses[aStudent.house].prefects.length <= 1) {
       aStudent.prefect = true;
       houses[aStudent.house].prefects.push(aStudent);
-      showStudents(arrayOfStudents);
+      buildList(arrayOfStudents);
       PopUp();
     } else {
       console.log("Student is not in Gryffindor");
@@ -280,10 +281,39 @@ function showStudent(aStudent) {
     const prefectIndex = houses[aStudent.house].prefects.indexOf(aStudent);
     houses[aStudent.house].prefects.splice(prefectIndex, 1);
     console.log("houses[aStudent.house]", houses[aStudent.house]);
-    showStudents(arrayOfStudents);
+    buildList(arrayOfStudents);
     PopUp();
   }
-  copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: /`;
+
+  if (aStudent.inquis === false) {
+    copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: no`;
+    copy.querySelector(".addToSquad").textContent = "ADD";
+    copy.querySelector(".addToSquad").addEventListener("click", addToSquad);
+  } else {
+    copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: yes`;
+    copy.querySelector(".addToSquad").textContent = "REMOVE";
+    copy
+      .querySelector(".addToSquad")
+      .addEventListener("click", removeFromSquad);
+  }
+
+  function addToSquad() {
+    if (aStudent.house === "Slytherin") {
+      aStudent.inquis = true;
+      buildList(arrayOfStudents);
+    } /*else if (aStudent.bloodstatus === "pureblood") {
+      aStudent.inquis = true;
+      buildList(arrayOfStudents)
+    }*/ else {
+      aStudent.prefect = false;
+      console.log("Student in not worthy of the inquisitorial squad.");
+    }
+  }
+
+  function removeFromSquad() {
+    aStudent.inquis = false;
+    buildList(arrayOfStudents);
+  }
 
   copy
     .getElementById(`${aStudent.firstName}${aStudent.lastName}`)
