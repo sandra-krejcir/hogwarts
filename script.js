@@ -2,6 +2,9 @@
 
 let arrayOfStudents = [];
 let arrayOfExpelled = [];
+let halfbloodFamilies = [];
+let purebloodFamilies = [];
+
 const filter_sortSettings = {
   filterBy: "all",
   sortBy: "",
@@ -16,6 +19,7 @@ const Student = {
   gender: "",
   imageFile: "",
   house: "",
+  bloodstatus: "",
   prefect: false,
   inquis: false,
 };
@@ -29,7 +33,7 @@ const houses = {
 
 document.addEventListener("DOMContentLoaded", start);
 
-function start() {
+async function start() {
   console.log("ready");
 
   const filterButtons = document.querySelectorAll("[data-action='filter']");
@@ -41,19 +45,35 @@ function start() {
     .querySelectorAll("[data-action='sort']")
     .forEach((button) => button.addEventListener("click", selectedSortBy));
 
-  getJSON();
+  await getFamilies();
+  await getJSON();
 }
 
 async function getJSON() {
-  fetch("https://petlatkea.dk/2021/hogwarts/students.json")
+  await fetch("https://petlatkea.dk/2021/hogwarts/students.json")
     .then((response) => response.json())
     .then((data) => prepareData(data));
+}
+
+async function getFamilies() {
+  await fetch("https://petlatkea.dk/2021/hogwarts/families.json")
+    .then((response) => response.json())
+    .then((data) => prepareFamilies(data));
 }
 
 function prepareData(jsonData) {
   arrayOfStudents = jsonData.map(convertJSONData);
 
-  showStudents(arrayOfStudents);
+  buildList(arrayOfStudents);
+}
+
+function prepareFamilies(familyData) {
+  halfbloodFamilies = familyData.half;
+  halfbloodFamilies.forEach((elm) => {
+    const indexOfFamily = familyData.pure.indexOf(elm);
+    familyData.pure.splice(indexOfFamily, 1);
+  });
+  purebloodFamilies = familyData.pure;
 }
 
 function convertJSONData(jsonDAta) {
@@ -76,6 +96,13 @@ function convertJSONData(jsonDAta) {
       .toLowerCase()}.png`;
   }
   student.house = showUppercased(jsonDAta.house.trim());
+  if (halfbloodFamilies.includes(student.lastName)) {
+    student.bloodstatus = "halfblood";
+  } else if (purebloodFamilies.includes(student.lastName)) {
+    student.bloodstatus = "pureblood";
+  } else {
+    student.bloodstatus = "muggle";
+  }
   return student;
 }
 
@@ -227,7 +254,9 @@ function showStudent(aStudent) {
     ".nickName"
   ).textContent = ` NICKNAME: ${aStudent.nickName}`;
   copy.querySelector(".house").textContent = `HOUSE: ${aStudent.house}`;
-  copy.querySelector(".bloodStatus").textContent = `BLOOD-STATUS: /`;
+  copy.querySelector(
+    ".bloodStatus"
+  ).textContent = `BLOOD-STATUS: ${aStudent.bloodstatus} `;
   if (aStudent.prefect === false) {
     copy.querySelector(".prefect").textContent = `PREFECT: no`;
     copy.querySelector(".addPrefect").textContent = "ADD";
@@ -301,10 +330,10 @@ function showStudent(aStudent) {
     if (aStudent.house === "Slytherin") {
       aStudent.inquis = true;
       buildList(arrayOfStudents);
-    } /*else if (aStudent.bloodstatus === "pureblood") {
+    } else if (aStudent.bloodstatus === "pureblood") {
       aStudent.inquis = true;
-      buildList(arrayOfStudents)
-    }*/ else {
+      buildList(arrayOfStudents);
+    } else {
       aStudent.prefect = false;
       console.log("Student in not worthy of the inquisitorial squad.");
     }
