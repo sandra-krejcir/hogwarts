@@ -4,6 +4,7 @@ let arrayOfStudents = [];
 let arrayOfExpelled = [];
 let halfbloodFamilies = [];
 let purebloodFamilies = [];
+let systemIshacked = false;
 
 const filter_sortSettings = {
   filterBy: "all",
@@ -44,6 +45,8 @@ async function start() {
   document
     .querySelectorAll("[data-action='sort']")
     .forEach((button) => button.addEventListener("click", selectedSortBy));
+
+  document.querySelector("#hacking").addEventListener("click", hackTheSystem);
 
   await getFamilies();
   await getJSON();
@@ -317,7 +320,11 @@ function showStudent(aStudent) {
   if (aStudent.inquis === false) {
     copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: no`;
     copy.querySelector(".addToSquad").textContent = "ADD";
-    copy.querySelector(".addToSquad").addEventListener("click", addToSquad);
+    if (systemIshacked === true) {
+      copy.querySelector(".addToSquad").addEventListener("click", hackSquad);
+    } else {
+      copy.querySelector(".addToSquad").addEventListener("click", addToSquad);
+    }
   } else {
     copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: yes`;
     copy.querySelector(".addToSquad").textContent = "REMOVE";
@@ -327,14 +334,18 @@ function showStudent(aStudent) {
   }
 
   function addToSquad() {
-    if (aStudent.house === "Slytherin") {
+    if (systemIshacked === true) {
+      aStudent.inquis = true;
+      buildList(arrayOfStudents);
+      setTimeout(removeFromSquad, 7000);
+    } else if (aStudent.house === "Slytherin") {
       aStudent.inquis = true;
       buildList(arrayOfStudents);
     } else if (aStudent.bloodstatus === "pureblood") {
       aStudent.inquis = true;
       buildList(arrayOfStudents);
     } else {
-      aStudent.prefect = false;
+      aStudent.inquis = false;
       console.log("Student in not worthy of the inquisitorial squad.");
     }
   }
@@ -342,6 +353,12 @@ function showStudent(aStudent) {
   function removeFromSquad() {
     aStudent.inquis = false;
     buildList(arrayOfStudents);
+  }
+
+  function hackSquad() {
+    aStudent.inquis = true;
+    buildList(arrayOfStudents);
+    setTimeout(removeFromSquad, 3000);
   }
 
   copy
@@ -364,11 +381,15 @@ function showStudent(aStudent) {
   }
   copy.querySelector(".expell").addEventListener("click", expellStudent);
   function expellStudent() {
-    const studentIndex = arrayOfStudents.indexOf(aStudent);
-    arrayOfStudents.splice(studentIndex, 1);
-    arrayOfExpelled.push(aStudent);
-    console.log(arrayOfExpelled);
-    buildList();
+    if (aStudent.lastName === "Krejcir") {
+      console.log("You cannot expell the master.");
+    } else {
+      const studentIndex = arrayOfStudents.indexOf(aStudent);
+      arrayOfStudents.splice(studentIndex, 1);
+      arrayOfExpelled.push(aStudent);
+      console.log(arrayOfExpelled);
+      buildList();
+    }
   }
   const parent = document.querySelector("ul");
   parent.appendChild(copy);
@@ -439,4 +460,24 @@ function showUppercased(fulLName) {
     fulLName.substring(0, 1).toUpperCase() +
     fulLName.substring(1).toLowerCase();
   return uppecasedName;
+}
+
+function hackTheSystem() {
+  systemIshacked = true;
+  console.log("systemIshacked", systemIshacked);
+  const meTheImposter = Object.create(Student);
+  meTheImposter.firstName = "Sandra";
+  meTheImposter.lastName = "Krejcir";
+  meTheImposter.middleName = "Null";
+  meTheImposter.nickName = "SandyD";
+  meTheImposter.house = "Gryffindor";
+  meTheImposter.gender = "girl";
+  meTheImposter.bloodstatus = "muggle";
+  meTheImposter.prefect = false;
+  meTheImposter.inquis = false;
+  arrayOfStudents.unshift(meTheImposter);
+  document
+    .querySelector("#hacking")
+    .removeEventListener("click", hackTheSystem);
+  buildList();
 }
