@@ -99,10 +99,10 @@ function convertJSONData(jsonDAta) {
       .toLowerCase()}.png`;
   }
   student.house = showUppercased(jsonDAta.house.trim());
-  if (halfbloodFamilies.includes(student.lastName)) {
-    student.bloodstatus = "halfblood";
-  } else if (purebloodFamilies.includes(student.lastName)) {
+  if (purebloodFamilies.includes(student.lastName)) {
     student.bloodstatus = "pureblood";
+  } else if (halfbloodFamilies.includes(student.lastName)) {
+    student.bloodstatus = "halfblood";
   } else {
     student.bloodstatus = "muggle";
   }
@@ -127,6 +127,8 @@ function filterList(filteredList) {
     filteredList = arrayOfStudents.filter(onlyRavenclaw);
   } else if (filter_sortSettings.filterBy === "Expelled") {
     filteredList = arrayOfExpelled;
+  } else if (filter_sortSettings.filterBy === "Prefects") {
+    filteredList = arrayOfStudents.filter(thePrefects);
   }
 
   console.log(filteredList);
@@ -159,6 +161,14 @@ function onlyHufflepuff(student) {
 
 function onlyRavenclaw(student) {
   if (student.house === "Ravenclaw") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function thePrefects(student) {
+  if (student.prefect === true) {
     return true;
   } else {
     return false;
@@ -257,6 +267,9 @@ function showStudent(aStudent) {
     ".nickName"
   ).textContent = ` NICKNAME: ${aStudent.nickName}`;
   copy.querySelector(".house").textContent = `HOUSE: ${aStudent.house}`;
+  if (systemIshacked === true) {
+    aStudent.bloodstatus = getRandomBlood();
+  }
   copy.querySelector(
     ".bloodStatus"
   ).textContent = `BLOOD-STATUS: ${aStudent.bloodstatus} `;
@@ -271,31 +284,6 @@ function showStudent(aStudent) {
   }
 
   function addPrefect() {
-    /*let filteredHouses = filterHouse(aStudent.house);
-    function filterHouse(house) {
-      const arr = arrayOfStudents.filter(function (elm) {
-        if (elm.house === house) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      return arr;
-    }
-    /*const filteredHouses = arrayOfStudents.filter(function (elm) {
-      if (elm.house === "Gryffindor") {
-        return true;
-      } else {
-        return false;
-      }
-    });
-    /*const howManyPref = filteredHouses.filter(function (elm) {
-      if (elm.prefect === true) {
-        return true;
-      } else {
-        return false;
-      }
-    });*/
     console.log("aStudent.house", aStudent.house);
     console.log("houses[aStudent.house]", houses[aStudent.house]);
     if (houses[aStudent.house].prefects.length <= 1) {
@@ -480,4 +468,16 @@ function hackTheSystem() {
     .querySelector("#hacking")
     .removeEventListener("click", hackTheSystem);
   buildList();
+}
+
+function getRandomBlood() {
+  let randBlood = Math.round(Math.random() * 2);
+
+  if (randBlood === 0) {
+    return "pureblood";
+  } else if (randBlood === 1) {
+    return "muggle";
+  } else {
+    return "halfblood";
+  }
 }
