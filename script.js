@@ -5,6 +5,7 @@ let arrayOfExpelled = [];
 let halfbloodFamilies = [];
 let purebloodFamilies = [];
 let systemIshacked = false;
+let popUpOpened = "";
 
 const filter_sortSettings = {
   filterBy: "all",
@@ -253,6 +254,15 @@ function showStudent(aStudent) {
   copy
     .querySelector(".exit")
     .setAttribute("id", `${aStudent.firstName}${aStudent.lastName}X`);
+  if (popUpOpened === `${aStudent.firstName}${aStudent.lastName}`) {
+    console.log(
+      `The elem: #${popUpOpened}Popup`,
+      copy.querySelector(`#${popUpOpened}Popup`)
+    );
+    copy.getElementById(`${popUpOpened}Popup`).classList.remove("disapear");
+    copy.getElementById(`${popUpOpened}X`).addEventListener("click", newClose);
+  }
+
   copy.querySelector(".profilePic").src = `images/${aStudent.imageFile}`;
   copy.querySelector(
     ".firstName"
@@ -290,7 +300,6 @@ function showStudent(aStudent) {
       aStudent.prefect = true;
       houses[aStudent.house].prefects.push(aStudent);
       buildList(arrayOfStudents);
-      PopUp();
     } else {
       console.log("Student is not in Gryffindor");
     }
@@ -302,7 +311,6 @@ function showStudent(aStudent) {
     houses[aStudent.house].prefects.splice(prefectIndex, 1);
     console.log("houses[aStudent.house]", houses[aStudent.house]);
     buildList(arrayOfStudents);
-    PopUp();
   }
 
   if (aStudent.inquis === false) {
@@ -322,6 +330,7 @@ function showStudent(aStudent) {
   }
 
   function addToSquad() {
+    popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
     if (systemIshacked === true) {
       aStudent.inquis = true;
       buildList(arrayOfStudents);
@@ -355,18 +364,23 @@ function showStudent(aStudent) {
   const popUp = copy.getElementById(
     `${aStudent.firstName}${aStudent.lastName}Popup`
   );
+
   const exClose = copy.getElementById(
     `${aStudent.firstName}${aStudent.lastName}X`
   );
-  function PopUp() {
-    console.log("function PopUp");
+
+  function PopUp(evt) {
+    popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
+
     popUp.classList.remove("disapear");
     exClose.addEventListener("click", popClose);
   }
+
   function popClose() {
     console.log("function popClose()");
     popUp.classList.add("disapear");
   }
+
   copy.querySelector(".expell").addEventListener("click", expellStudent);
   function expellStudent() {
     if (aStudent.lastName === "Krejcir") {
@@ -389,6 +403,11 @@ function buildList() {
   const displayedList = filterList(arrayOfStudents);
   const sortedList = sortList(displayedList);
   showStudents(sortedList);
+}
+
+function newClose() {
+  document.getElementById(`${popUpOpened}Popup`).classList.add("disapear");
+  popUpOpened = "";
 }
 
 function getFirstName(fullName) {
