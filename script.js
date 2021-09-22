@@ -255,10 +255,6 @@ function showStudent(aStudent) {
     .querySelector(".exit")
     .setAttribute("id", `${aStudent.firstName}${aStudent.lastName}X`);
   if (popUpOpened === `${aStudent.firstName}${aStudent.lastName}`) {
-    console.log(
-      `The elem: #${popUpOpened}Popup`,
-      copy.querySelector(`#${popUpOpened}Popup`)
-    );
     copy.getElementById(`${popUpOpened}Popup`).classList.remove("disapear");
     copy.getElementById(`${popUpOpened}X`).addEventListener("click", newClose);
   }
@@ -301,7 +297,8 @@ function showStudent(aStudent) {
       houses[aStudent.house].prefects.push(aStudent);
       buildList(arrayOfStudents);
     } else {
-      console.log("Student is not in Gryffindor");
+      popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
+      theprefectAlert();
     }
   }
 
@@ -343,7 +340,10 @@ function showStudent(aStudent) {
       buildList(arrayOfStudents);
     } else {
       aStudent.inquis = false;
-      console.log("Student in not worthy of the inquisitorial squad.");
+      copy
+        .querySelector("#squadAlert")
+        .classList.remove("disapear").textContent =
+        "Student in not worthy of the inquisitorial squad.";
     }
   }
 
@@ -408,6 +408,12 @@ function buildList() {
 function newClose() {
   document.getElementById(`${popUpOpened}Popup`).classList.add("disapear");
   popUpOpened = "";
+}
+
+function thePrefectAlert() {
+  document
+    .querySelector(`#${popUpOpened}Popup .theAlert`)
+    .classList.remove("disapear");
 }
 
 function getFirstName(fullName) {
