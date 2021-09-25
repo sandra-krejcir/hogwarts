@@ -47,7 +47,9 @@ async function start() {
     .querySelectorAll("[data-action='sort']")
     .forEach((button) => button.addEventListener("click", selectedSortBy));
 
-  document.querySelector("#hacking").addEventListener("click", hackTheSystem);
+  document.querySelector(".moreleft").addEventListener("mouseover", revealHack);
+  document.querySelector(".moreleft").addEventListener("mouseleave", hideHack);
+  document.querySelector("#search").addEventListener("input", theSearch);
 
   await getFamilies();
   await getJSON();
@@ -227,6 +229,27 @@ function sortList(sortedList) {
 
 function showStudents(students) {
   document.querySelector("ul").innerHTML = "";
+  document.querySelector(
+    ".allNum"
+  ).textContent = `Number of displayed students: ${students.length}`;
+  document.querySelector(
+    ".expellNum"
+  ).textContent = `Number of expelled students: ${arrayOfExpelled.length}`;
+  document.querySelector(
+    ".nonexpellNum"
+  ).textContent = `Number of non-expelled students: ${arrayOfStudents.length}`;
+  document.querySelector(
+    ".gryffNum"
+  ).textContent = `Number of Gryffindor students:
+    ${arrayOfStudents.filter(onlyGryffindor).length}`;
+  document.querySelector(".slyNum").textContent = `Number of Slytherin students:
+    ${arrayOfStudents.filter(onlySlytherin).length}`;
+  document.querySelector(".ravNum").textContent = `Number of Ravenclaw students:
+    ${arrayOfStudents.filter(onlyRavenclaw).length}`;
+  document.querySelector(
+    ".huffNum"
+  ).textContent = `Number of Hufflepuff students:
+    ${arrayOfStudents.filter(onlyHufflepuff).length}`;
 
   students.forEach(showStudent);
 }
@@ -298,7 +321,7 @@ function showStudent(aStudent) {
       buildList(arrayOfStudents);
     } else {
       popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
-      theprefectAlert();
+      thePrefectAlert();
     }
   }
 
@@ -340,10 +363,8 @@ function showStudent(aStudent) {
       buildList(arrayOfStudents);
     } else {
       aStudent.inquis = false;
-      copy
-        .querySelector("#squadAlert")
-        .classList.remove("disapear").textContent =
-        "Student in not worthy of the inquisitorial squad.";
+      popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
+      theSquadAlert();
     }
   }
 
@@ -369,7 +390,7 @@ function showStudent(aStudent) {
     `${aStudent.firstName}${aStudent.lastName}X`
   );
 
-  function PopUp(evt) {
+  function PopUp() {
     popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
 
     popUp.classList.remove("disapear");
@@ -379,6 +400,9 @@ function showStudent(aStudent) {
   function popClose() {
     console.log("function popClose()");
     popUp.classList.add("disapear");
+    popUp.querySelector(`.squadAlert`).classList.add("disapear");
+
+    popUp.querySelector(`.theprefectAlert`).classList.add("disapear");
   }
 
   copy.querySelector(".expell").addEventListener("click", expellStudent);
@@ -405,14 +429,43 @@ function buildList() {
   showStudents(sortedList);
 }
 
+function revealHack() {
+  document.querySelector("#hacking").classList.remove("disapear");
+  document.querySelector("#hacking").addEventListener("click", hackTheSystem);
+}
+
+function hideHack() {
+  document.querySelector("#hacking").classList.add("disapear");
+}
+
+function theSearch(evt) {
+  showStudents(
+    arrayOfStudents.filter((elm) => {
+      return (
+        elm.firstName.toUpperCase().includes(evt.target.value.toUpperCase()) ||
+        elm.lastName.toUpperCase().includes(evt.target.value.toUpperCase()) ||
+        elm.middleName.toUpperCase().includes(evt.target.value.toUpperCase()) ||
+        elm.house.toUpperCase().includes(evt.target.value.toUpperCase())
+      );
+    })
+  );
+}
+
 function newClose() {
+  console.log("function newClose");
   document.getElementById(`${popUpOpened}Popup`).classList.add("disapear");
   popUpOpened = "";
 }
 
 function thePrefectAlert() {
   document
-    .querySelector(`#${popUpOpened}Popup .theAlert`)
+    .querySelector(`#${popUpOpened}Popup .theprefectAlert`)
+    .classList.remove("disapear");
+}
+
+function theSquadAlert() {
+  document
+    .querySelector(`#${popUpOpened}Popup .squadAlert`)
     .classList.remove("disapear");
 }
 
@@ -477,6 +530,7 @@ function showUppercased(fulLName) {
 
 function hackTheSystem() {
   systemIshacked = true;
+  document.querySelector("body").classList.add("warning");
   console.log("systemIshacked", systemIshacked);
   const meTheImposter = Object.create(Student);
   meTheImposter.firstName = "Sandra";

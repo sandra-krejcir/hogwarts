@@ -3,6 +3,7 @@
 body {
   margin-left: 5vw;
   font-family: "Quicksand", sans-serif;
+  width: 90vw;
 }
 
 .disapear {
@@ -117,4 +118,35 @@ button {
 
 #sorting .sortBy[data-sort-direction="desc"]::after {
   content: " Z-A";
+}
+
+.center {
+  display: grid;
+  justify-items: center;
+  margin-top: -15vw;
+}
+
+.left {
+  margin-left: -22vw;
+}
+
+.moreleft {
+  margin-left: -28vw;
+}
+
+#search {
+  margin-top: 2vw;
+  margin-left: 0.2vw;
+}
+
+.theCounters {
+  margin-top: 2vw;
+  margin-left: 0.2vw;
+  font-size: 0.75vw;
+}
+
+.warning {
+  border-style: dotted;
+  border-color: red;
+  border-width: 5px;
 }

@@ -22,15 +22,26 @@
           <p class="house"></p>
           <p class="bloodStatus"></p>
           <p><span class="prefect"></span> &nbsp&nbsp&nbsp<button class="addPrefect">ADD</button></p>
-          <p class="theAlert disapear">There's already 2 prefects in the house.</p>
+          <p class="theprefectAlert disapear">There's 2 prefects in the house.</p>
           <p><span class="theSquad"></span> &nbsp&nbsp&nbsp<button class="addToSquad">ADD</button></p>
-          <p class="squadAlert disapear"></p>
+          <p class="squadAlert disapear">"Student in not worthy <br> of the inquisitorial squad."</p>
           <div id="expell"><button class="expell">EXPELL</button></div>
         </div>
       </li>
     </template>
-    <h1>Students</h1>
-    <p id="filtering">
+    <input type="text" id="search" placeholder="Search"></input>
+    <div class="theCounters">
+      <p class="allNum"></p>
+      <p class="expellNum"></p>
+      <p class="nonexpellNum"></p>
+      <p class="gryffNum"></p>
+      <p class="slyNum"></p>
+      <p class="huffNum"></p>
+      <p class="ravNum"></p>
+    </div>
+    <div class="center">
+      <h1>Students</h1>
+   <p id="filtering">
       Filter:
       <button class="filter" data-action="filter" data-filter="all">ALL</button>
       <button class="filter" data-action="filter" data-filter="Gryffindor">Gryffindor</button>
@@ -40,19 +51,23 @@
       <button class="filter" data-action="filter" data-filter="Expelled">Expelled</button>
       <button class="filter" data-action="filter" data-filter="Prefects">Prefects</button>
       </p>
-      <p id="sorting">
+      <div class="left"><p id="sorting">
         Sort:
         <button  data-action="sort" data-sort="firstName">First name</button>
         <button  data-action="sort" data-sort="lastName">Last name</button>
         <button  data-action="sort" data-sort="house">House</button>
         </p>
-        <p>
-          Warning:
-          <button id="hacking"  data-action="submit">Hack the system</button>
+      </div> 
+      <div class="moreleft"><p>
+          Warning!
+          <button id="hacking" class="disapear"  data-action="submit">Hack the system</button>
+          </p>
+          </div>
     <sec>
       <ul>
       </ul>
     </sec>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
