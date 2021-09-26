@@ -351,11 +351,7 @@ function showStudent(aStudent) {
 
   function addToSquad() {
     popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
-    if (systemIshacked === true) {
-      aStudent.inquis = true;
-      buildList(arrayOfStudents);
-      setTimeout(removeFromSquad, 7000);
-    } else if (aStudent.house === "Slytherin") {
+    if (aStudent.house === "Slytherin") {
       aStudent.inquis = true;
       buildList(arrayOfStudents);
     } else if (aStudent.bloodstatus === "pureblood") {
@@ -401,14 +397,14 @@ function showStudent(aStudent) {
     console.log("function popClose()");
     popUp.classList.add("disapear");
     popUp.querySelector(`.squadAlert`).classList.add("disapear");
-
+    popUp.querySelector(`.expellAlert`).classList.add("disapear");
     popUp.querySelector(`.theprefectAlert`).classList.add("disapear");
   }
 
   copy.querySelector(".expell").addEventListener("click", expellStudent);
   function expellStudent() {
     if (aStudent.lastName === "Krejcir") {
-      console.log("You cannot expell the master.");
+      alertNoEpell();
     } else {
       const studentIndex = arrayOfStudents.indexOf(aStudent);
       arrayOfStudents.splice(studentIndex, 1);
@@ -466,6 +462,12 @@ function thePrefectAlert() {
 function theSquadAlert() {
   document
     .querySelector(`#${popUpOpened}Popup .squadAlert`)
+    .classList.remove("disapear");
+}
+
+function alertNoEpell() {
+  document
+    .querySelector(`#${popUpOpened}Popup .expellAlert`)
     .classList.remove("disapear");
 }
 
@@ -536,12 +538,15 @@ function hackTheSystem() {
   meTheImposter.firstName = "Sandra";
   meTheImposter.lastName = "Krejcir";
   meTheImposter.middleName = "Null";
-  meTheImposter.nickName = "SandyD";
+  meTheImposter.nickName = "Sandy";
   meTheImposter.house = "Gryffindor";
   meTheImposter.gender = "girl";
   meTheImposter.bloodstatus = "muggle";
   meTheImposter.prefect = false;
   meTheImposter.inquis = false;
+  meTheImposter.imageFile = `${meTheImposter.lastName.toLowerCase()}_${meTheImposter.firstName
+    .substring(0, 1)
+    .toLowerCase()}.png`;
   arrayOfStudents.unshift(meTheImposter);
   document
     .querySelector("#hacking")
