@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", start);
 async function start() {
   console.log("ready");
 
+  //get the filter & sortBy buttons
   const filterButtons = document.querySelectorAll("[data-action='filter']");
   filterButtons.forEach((button) =>
     button.addEventListener("click", selectedFilter)
@@ -47,6 +48,7 @@ async function start() {
     .querySelectorAll("[data-action='sort']")
     .forEach((button) => button.addEventListener("click", selectedSortBy));
 
+  //adding the "hack" bbutton & search field
   document.querySelector(".moreleft").addEventListener("mouseover", revealHack);
   document.querySelector(".moreleft").addEventListener("mouseleave", hideHack);
   document.querySelector("#search").addEventListener("input", theSearch);
@@ -68,12 +70,14 @@ async function getFamilies() {
 }
 
 function prepareData(jsonData) {
+  //append each student from JSON file onto the array
   arrayOfStudents = jsonData.map(convertJSONData);
 
   buildList(arrayOfStudents);
 }
 
 function prepareFamilies(familyData) {
+  //update the global variables & cleanup the "pure" array
   halfbloodFamilies = familyData.half;
   halfbloodFamilies.forEach((elm) => {
     const indexOfFamily = familyData.pure.indexOf(elm);
@@ -113,6 +117,7 @@ function convertJSONData(jsonDAta) {
 }
 
 function selectedFilter(choice) {
+  //get the chosen filter & go to buildList
   const filter = choice.target.dataset.filter;
   filter_sortSettings.filterBy = filter;
   buildList();
@@ -120,6 +125,8 @@ function selectedFilter(choice) {
 
 function filterList(filteredList) {
   console.log(filter_sortSettings.filterBy);
+
+  //filter the list by different parameters (the chosen filter)
   if (filter_sortSettings.filterBy === "Gryffindor") {
     filteredList = arrayOfStudents.filter(onlyGryffindor);
   } else if (filter_sortSettings.filterBy === "Slytherin") {
@@ -137,6 +144,8 @@ function filterList(filteredList) {
   console.log(filteredList);
   return filteredList;
 }
+
+//filterings for different parameters *
 
 function onlyGryffindor(student) {
   if (student.house === "Gryffindor") {
@@ -177,8 +186,10 @@ function thePrefects(student) {
     return false;
   }
 }
+//*
 
 function selectedSortBy(sortChoice) {
+  //get & update the global variables sortBy & sortDir
   const sortBy = sortChoice.target.dataset.sort;
   const sortDir = sortChoice.target.dataset.sortDirection;
   filter_sortSettings.sortBy = sortBy;
@@ -191,6 +202,7 @@ function selectedSortBy(sortChoice) {
 
   sortChoice.target.classList.add("sortBy");
 
+  //toggle sortDir
   if (sortDir === "asc") {
     sortChoice.target.dataset.sortDirection = "desc";
   } else {
@@ -201,6 +213,7 @@ function selectedSortBy(sortChoice) {
 }
 
 function sortList(sortedList) {
+  //toggle sortDir
   let direction = 1;
 
   if (filter_sortSettings.sortDir === "asc") {
@@ -211,6 +224,7 @@ function sortList(sortedList) {
 
   console.log(sortedList);
 
+  //sort list by the chosen sortBy
   sortedList = sortedList.sort(sortByParameter);
 
   function sortByParameter(studentA, studentB) {
@@ -229,6 +243,8 @@ function sortList(sortedList) {
 
 function showStudents(students) {
   document.querySelector("ul").innerHTML = "";
+
+  //display the student counters in HTML*
   document.querySelector(
     ".allNum"
   ).textContent = `Number of displayed students: ${students.length}`;
@@ -250,11 +266,13 @@ function showStudents(students) {
     ".huffNum"
   ).textContent = `Number of Hufflepuff students:
     ${arrayOfStudents.filter(onlyHufflepuff).length}`;
+  //*
 
   students.forEach(showStudent);
 }
 
 function showStudent(aStudent) {
+  //copy & fill in the template for the popup
   const template = document.querySelector(".theStudentList").content;
   const copy = template.cloneNode(true);
   if (aStudent.lastName === "Null") {
@@ -296,12 +314,16 @@ function showStudent(aStudent) {
     ".nickName"
   ).textContent = ` NICKNAME: ${aStudent.nickName}`;
   copy.querySelector(".house").textContent = `HOUSE: ${aStudent.house}`;
+
+  //part of the hacking feature - random bloodstatus
   if (systemIshacked === true) {
     aStudent.bloodstatus = getRandomBlood();
   }
   copy.querySelector(
     ".bloodStatus"
   ).textContent = `BLOOD-STATUS: ${aStudent.bloodstatus} `;
+
+  //adding or removing the prefect
   if (aStudent.prefect === false) {
     copy.querySelector(".prefect").textContent = `PREFECT: no`;
     copy.querySelector(".addPrefect").textContent = "ADD";
@@ -315,6 +337,9 @@ function showStudent(aStudent) {
   function addPrefect() {
     console.log("aStudent.house", aStudent.house);
     console.log("houses[aStudent.house]", houses[aStudent.house]);
+
+    //check the length of the prefects array in certain house in the 'houses' object
+    //if the length is more than 2 show an alert in HTML
     if (houses[aStudent.house].prefects.length <= 1) {
       aStudent.prefect = true;
       houses[aStudent.house].prefects.push(aStudent);
@@ -325,6 +350,7 @@ function showStudent(aStudent) {
     }
   }
 
+  //removing the prefect; removing it from both objects
   function removePrefect() {
     aStudent.prefect = false;
     const prefectIndex = houses[aStudent.house].prefects.indexOf(aStudent);
@@ -333,9 +359,12 @@ function showStudent(aStudent) {
     buildList(arrayOfStudents);
   }
 
+  // adding or removing students from the inquisitorial squad
   if (aStudent.inquis === false) {
     copy.querySelector(".theSquad").textContent = `INQUIS. SQUAD: no`;
     copy.querySelector(".addToSquad").textContent = "ADD";
+
+    //check if the system is hacked or not (global variable)
     if (systemIshacked === true) {
       copy.querySelector(".addToSquad").addEventListener("click", hackSquad);
     } else {
@@ -349,6 +378,7 @@ function showStudent(aStudent) {
       .addEventListener("click", removeFromSquad);
   }
 
+  //add to squad if they're a part of Slytherin or pureblood
   function addToSquad() {
     popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
     if (aStudent.house === "Slytherin") {
@@ -369,6 +399,7 @@ function showStudent(aStudent) {
     buildList(arrayOfStudents);
   }
 
+  // if the system is hacked -> add someone to squad and remove them after 3 sec
   function hackSquad() {
     aStudent.inquis = true;
     buildList(arrayOfStudents);
@@ -386,6 +417,7 @@ function showStudent(aStudent) {
     `${aStudent.firstName}${aStudent.lastName}X`
   );
 
+  //open the popup on click & and update the global variable to be sure which popup is opened
   function PopUp() {
     popUpOpened = `${aStudent.firstName}${aStudent.lastName}`;
 
@@ -393,19 +425,24 @@ function showStudent(aStudent) {
     exClose.addEventListener("click", popClose);
   }
 
+  //close the popup, hide the alerts & restart the global variable
   function popClose() {
     console.log("function popClose()");
     popUp.classList.add("disapear");
     popUp.querySelector(`.squadAlert`).classList.add("disapear");
     popUp.querySelector(`.expellAlert`).classList.add("disapear");
     popUp.querySelector(`.theprefectAlert`).classList.add("disapear");
+    popUpOpened = "";
   }
 
   copy.querySelector(".expell").addEventListener("click", expellStudent);
+
+  // if the last name is equal to mine -> don't expell
   function expellStudent() {
     if (aStudent.lastName === "Krejcir") {
       alertNoEpell();
     } else {
+      //find the index of the student & erase them from the students array, then push onto array of expelled
       const studentIndex = arrayOfStudents.indexOf(aStudent);
       arrayOfStudents.splice(studentIndex, 1);
       arrayOfExpelled.push(aStudent);
@@ -417,19 +454,20 @@ function showStudent(aStudent) {
   parent.appendChild(copy);
 }
 
-console.log("arrayOfStudents", arrayOfStudents);
-
 function buildList() {
+  //get the filtered list and then sort it, once done push it to showStudents & there .forEach(showStudent)
   const displayedList = filterList(arrayOfStudents);
   const sortedList = sortList(displayedList);
   showStudents(sortedList);
 }
 
+//revealing the hack button
 function revealHack() {
   document.querySelector("#hacking").classList.remove("disapear");
   document.querySelector("#hacking").addEventListener("click", hackTheSystem);
 }
 
+//hiding the hack button
 function hideHack() {
   document.querySelector("#hacking").classList.add("disapear");
 }
@@ -447,12 +485,14 @@ function theSearch(evt) {
   );
 }
 
+//function needed to close the popup after adding the prefect or inquis. squad
 function newClose() {
   console.log("function newClose");
   document.getElementById(`${popUpOpened}Popup`).classList.add("disapear");
   popUpOpened = "";
 }
 
+//the alert functions
 function thePrefectAlert() {
   document
     .querySelector(`#${popUpOpened}Popup .theprefectAlert`)
@@ -471,6 +511,7 @@ function alertNoEpell() {
     .classList.remove("disapear");
 }
 
+// functions for getting the names & making them uppercased *
 function getFirstName(fullName) {
   if (fullName.includes(" ")) {
     const firstName = fullName.substring(0, fullName.indexOf(" "));
@@ -529,7 +570,9 @@ function showUppercased(fulLName) {
     fulLName.substring(1).toLowerCase();
   return uppecasedName;
 }
+//*
 
+// set the global variable to true to kick of all the hacking features & create a new student object - ME; push it to the beginning of the students array
 function hackTheSystem() {
   systemIshacked = true;
   document.querySelector("body").classList.add("warning");
@@ -554,6 +597,7 @@ function hackTheSystem() {
   buildList();
 }
 
+//calculate the random bloodstatus 0=pureblood, 1=muggle, 2=halfblood
 function getRandomBlood() {
   let randBlood = Math.round(Math.random() * 2);
 
